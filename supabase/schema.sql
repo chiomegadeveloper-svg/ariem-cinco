@@ -1,0 +1,13 @@
+create extension if not exists pgcrypto;
+create table if not exists public.owner_profiles (user_id uuid primary key references auth.users(id) on delete cascade, created_at timestamptz not null default now());
+create table if not exists public.site_settings (key text primary key, value text not null default '', updated_at timestamptz not null default now());
+create table if not exists public.inquiries (id uuid primary key default gen_random_uuid(), name text not null, email text not null, organization text, event_type text, preferred_date date, audience_size integer, message text not null, status text not null default 'new' check(status in('new','contacted','confirmed','closed')), created_at timestamptz not null default now());
+alter table public.owner_profiles enable row level security;
+alter table public.site_settings enable row level security;
+alter table public.inquiries enable row level security;
+create policy "Public can read settings" on public.site_settings for select using (true);
+create policy "Owner can manage settings" on public.site_settings for all using (exists(select 1 from public.owner_profiles p where p.user_id=auth.uid())) with check (exists(select 1 from public.owner_profiles p where p.user_id=auth.uid()));
+create policy "Public can send inquiries" on public.inquiries for insert with check (char_length(name) between 2 and 120 and char_length(email) between 5 and 240 and char_length(message) between 5 and 4000);
+create policy "Owner can manage inquiries" on public.inquiries for all using (exists(select 1 from public.owner_profiles p where p.user_id=auth.uid())) with check (exists(select 1 from public.owner_profiles p where p.user_id=auth.uid()));
+insert into public.site_settings(key,value) values ('headline','Communication That Moves People.'),('intro','Helping leaders, educators, and organizations communicate with clarity, confidence, and purpose.'),('contact_email','hello@ariemcinco.com'),('booking_url','') on conflict(key) do nothing;
+-- Create the owner in Supabase Auth, then run: insert into public.owner_profiles(user_id) values ('OWNER_AUTH_USER_UUID');
