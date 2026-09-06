@@ -4,6 +4,7 @@ import{CalendarDays,Mail,Menu,Send,X}from"lucide-react";
 import"../app/globals.css";
 import"../app/admin.css";
 import"./overrides.css";
+import"./admin-overrides.css";
 import{Admin}from"./admin";
 import{EntryCarousel,EntryGrid,PortfolioCarousel,useSiteSettings}from"./content";
 import{OWNER_EMAIL,supabase}from"./data";
