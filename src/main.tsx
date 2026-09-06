@@ -5,7 +5,7 @@ import"../app/globals.css";
 import"../app/admin.css";
 import"./overrides.css";
 import{Admin}from"./admin";
-import{EntryGrid,PortfolioCarousel,useSiteSettings}from"./content";
+import{EntryCarousel,EntryGrid,PortfolioCarousel,useSiteSettings}from"./content";
 import{OWNER_EMAIL,supabase}from"./data";
 
 const nav=["Portfolio","Foundation","Topics","Highlights","Projects","Contact","RFQ"];
@@ -28,7 +28,7 @@ function Home(){
 }
 
 function Portfolio(){const settings=useSiteSettings();return <Shell><section className="section dynamic-page portfolio-page"><div className="section-heading"><p className="kicker">Selected work</p><h2>{settings.portfolio_heading}</h2><p>{settings.portfolio_intro}</p></div><EntryGrid section="portfolio"/></section></Shell>}
-function Foundation(){const settings=useSiteSettings();return <Shell><section className="section foundation dynamic-page"><div className="section-heading"><p className="kicker">Foundation</p><h2>{settings.foundation_heading}</h2><p>{settings.foundation_intro}</p></div><EntryGrid section="foundation"/></section></Shell>}
+function Foundation(){const settings=useSiteSettings();return <Shell><section className="section foundation dynamic-page"><div className="section-heading"><p className="kicker">Foundation</p><h2>{settings.foundation_heading}</h2><p>{settings.foundation_intro}</p></div><EntryCarousel section="foundation"/></section></Shell>}
 function Topics(){const settings=useSiteSettings();return <Shell><section className="section light-section dynamic-page"><div className="section-heading"><p className="kicker">Speaking topics</p><h2>{settings.topics_heading}</h2><p>{settings.topics_intro}</p></div><EntryGrid section="topics" variant="light"/></section></Shell>}
 function Highlights(){const settings=useSiteSettings();return <Shell><section className="section highlights dynamic-page"><div className="section-heading"><p className="kicker">Highlights</p><h2>{settings.highlights_heading}</h2><p>{settings.highlights_intro}</p></div><EntryGrid section="highlights"/></section></Shell>}
 function Projects(){const settings=useSiteSettings();return <Shell><section className="section projects dynamic-page"><div className="section-heading"><p className="kicker">Projects</p><h2>{settings.projects_heading}</h2><p>{settings.projects_intro}</p></div><EntryGrid section="projects"/></section></Shell>}
