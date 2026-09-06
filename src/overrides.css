@@ -9,3 +9,26 @@
 .dark-header nav a.active{background:linear-gradient(135deg,rgba(59,102,232,.7),rgba(34,76,194,.45));box-shadow:inset 0 1px 0 rgba(255,255,255,.2);color:#fff}.page-main,.hero{animation:page-in .45s ease both}@keyframes page-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}.menu-toggle{display:none;width:46px;height:46px;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.18);border-radius:15px;background:rgba(5,13,32,.45);color:#fff}.mobile-menu{position:fixed;inset:0 0 0 auto;width:min(360px,88vw);padding:1.2rem 1.5rem 2rem;z-index:100;display:flex;flex-direction:column;gap:.65rem;background:linear-gradient(160deg,rgba(4,10,24,.98),rgba(11,40,125,.98));box-shadow:-24px 0 70px rgba(0,0,0,.45);animation:menu-in .25s ease both}.mobile-menu>button{align-self:flex-end;width:44px;height:44px;border:1px solid rgba(255,255,255,.15);border-radius:14px;background:rgba(255,255,255,.06);color:#fff}.mobile-menu>span{margin:.75rem 0;color:#789dff;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.18em}.mobile-menu>a:not(.btn){padding:1rem;border-bottom:1px solid rgba(255,255,255,.1);font-weight:700}.mobile-menu>.btn{margin-top:auto}@keyframes menu-in{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:none}}@media(max-width:1100px){.menu-toggle{display:flex}.dark-header .header-cta{margin-left:auto}}@media(max-width:580px){.dark-header .header-cta{display:none}}
 @media(prefers-reduced-motion:reduce){.page-main,.hero,.mobile-menu{animation:none}.carousel-track{transition:none}}
 .professional-footer{gap:2rem;padding:2.3rem max(5vw,2rem) 1rem}.professional-footer strong{margin-bottom:.7rem}.footer-links nav,.footer-contact{gap:.5rem}.professional-footer .footer-brand img{max-height:50px}.professional-footer .footer-brand p{margin:.4rem 0}.footer-bottom{align-items:center;padding-top:.85rem}.developer-badge{display:flex!important;align-items:center;gap:.55rem;font-size:.68rem}.developer-badge>span:first-child{color:#8f9aae}.developer-logo{width:68px;height:28px;padding:3px 6px;display:inline-flex;align-items:center;border-radius:8px;background:#fff;overflow:hidden}.developer-logo img{width:100%;height:100%;object-fit:contain}.developer-badge b{font-size:.68rem;letter-spacing:.04em;color:#e5eafa}@media(max-width:760px){.professional-footer{gap:1.4rem;padding:2.2rem 1.4rem 1rem}.developer-badge{flex-wrap:wrap}.developer-badge b{width:100%}}
+
+/* Galaxy Tab and portrait-tablet hero */
+@media (min-width:761px) and (max-width:1100px){
+  .hero{min-height:calc(100svh - 84px);grid-template-columns:45% 55%;background:radial-gradient(circle at 88% 40%,rgba(23,71,232,.24),transparent 30%),linear-gradient(122deg,#000 0 45%,#030711 45% 100%)}
+  .portrait-wrap{min-height:0;height:100%;align-self:stretch}
+  .hero .portrait.plain{width:170%;height:100%;left:-35%;top:0;object-fit:contain;object-position:center bottom}
+  .hero-copy{justify-content:center;padding:clamp(2.25rem,5vh,4rem) clamp(2rem,4vw,3.5rem)}
+  .hero-copy>.portfolio-carousel{width:100%;max-width:none;margin-bottom:1.15rem}
+  .carousel-slide{padding:1rem 1.15rem}
+  .carousel-slide h3{font-size:.95rem}
+  .carousel-slide p{font-size:.75rem;padding-right:3.5rem}
+  .hero .eyebrow{font-size:.7rem;letter-spacing:.14em;gap:.7rem}
+  .hero .eyebrow span{width:24px}
+  .hero h1{font-size:clamp(2.6rem,5.6vw,3.75rem);margin:1.25rem 0 1rem}
+  .hero .lead{font-size:1rem;line-height:1.65}
+  .hero .speaker-lockup{margin:1.35rem 0 1.7rem}
+  .hero .speaker-lockup strong{font-size:1.25rem}
+  .hero .speaker-lockup small{font-size:.88rem}
+  .hero-actions{gap:.8rem;flex-wrap:wrap}
+  .hero-actions .btn{min-height:46px;padding-inline:1.35rem;font-size:.72rem}
+  .professional-footer{grid-template-columns:1fr 1fr;padding-inline:2rem}
+  .footer-bottom{grid-column:1/-1}
+}
