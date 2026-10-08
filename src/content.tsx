@@ -1,6 +1,9 @@
 import React,{useEffect,useState}from"react";
 import{ChevronLeft,ChevronRight,Image as ImageIcon,X}from"lucide-react";
 import{defaultSettings,Entry,getEntries,getSettings,Section,Settings}from"./data";
+import{cropFromImageUrl}from"./image-utils";
+
+function imageDisplayStyle(url:string|null):React.CSSProperties{const crop=cropFromImageUrl(url);return{objectPosition:`${50+crop.x/2}% ${50+crop.y/2}%`,transform:`scale(${crop.zoom})`}}
 
 export function useSiteSettings(){
   const[settings,setSettings]=useState<Settings>(defaultSettings);
@@ -22,7 +25,7 @@ export function EntryGrid({section,variant="dark"}:{section:Section;variant?:"da
   if(!entries.length)return <div className={`content-empty ${variant}`}><ImageIcon/><h3>No published entries yet</h3><p>New articles will appear here after the owner publishes them.</p></div>;
   return <>
     <div className={`entry-grid ${variant}`}>{entries.map(entry=><button className="entry-card" key={entry.id} onClick={()=>setSelected(entry)}>
-      <span className="entry-image">{entry.image_url?<img src={entry.image_url} alt=""/>:<ImageIcon/>}</span>
+      <span className="entry-image">{entry.image_url?<img src={entry.image_url} alt="" style={imageDisplayStyle(entry.image_url)}/>:<ImageIcon/>}</span>
       <span className="entry-copy"><small>{entry.section}</small><strong>{entry.title}</strong><p>{entry.excerpt}</p><b>Read article</b></span>
     </button>)}</div>
     {selected&&<ArticleModal entry={selected} close={()=>setSelected(null)}/>} 
@@ -33,7 +36,7 @@ function ArticleModal({entry,close}:{entry:Entry;close:()=>void}){
   useEffect(()=>{const key=(e:KeyboardEvent)=>e.key==="Escape"&&close();document.body.classList.add("modal-open");window.addEventListener("keydown",key);return()=>{document.body.classList.remove("modal-open");window.removeEventListener("keydown",key)}},[close]);
   return <div className="article-backdrop" onMouseDown={e=>e.target===e.currentTarget&&close()} role="presentation"><article className="article-modal" role="dialog" aria-modal="true" aria-labelledby="article-title">
     <button className="article-close" onClick={close} aria-label="Close article"><X/></button>
-    {entry.image_url&&<img className="article-cover" src={entry.image_url} alt=""/>}
+    {entry.image_url&&<img className="article-cover" src={entry.image_url} alt="" style={imageDisplayStyle(entry.image_url)}/>}
     <div className="article-body"><p className="kicker">{entry.section}</p><h2 id="article-title">{entry.title}</h2><p className="article-lead">{entry.excerpt}</p><div className="article-text">{entry.body.split("\n").map((line,index)=>line?<p key={index}>{line}</p>:<br key={index}/>)}</div></div>
   </article></div>;
 }
@@ -58,7 +61,7 @@ export function EntryCarousel({section}:{section:Section}){
   return <>
     <section className="content-carousel" aria-label={`${section} articles`}>
       <button className="carousel-feature" onClick={()=>setSelected(current)}>
-        <span className="carousel-feature-image">{current.image_url?<img src={current.image_url} alt=""/>:<ImageIcon/>}</span>
+        <span className="carousel-feature-image">{current.image_url?<img src={current.image_url} alt="" style={imageDisplayStyle(current.image_url)}/>:<ImageIcon/>}</span>
         <span className="carousel-feature-copy"><small>{section} · {String(active+1).padStart(2,"0")}</small><strong>{current.title}</strong><p>{current.excerpt}</p><b>Read full article</b></span>
       </button>
       {entries.length>1&&<div className="content-carousel-nav"><button onClick={()=>setActive(value=>(value-1+entries.length)%entries.length)} aria-label="Previous article"><ChevronLeft/></button><div>{entries.map((entry,index)=><button key={entry.id} className={active===index?"active":""} onClick={()=>setActive(index)} aria-label={`Show ${entry.title}`}/>)}</div><button onClick={()=>setActive(value=>(value+1)%entries.length)} aria-label="Next article"><ChevronRight/></button></div>}
