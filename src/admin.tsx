@@ -17,6 +17,7 @@ export function Admin(){
   const[entry,setEntry]=useState(emptyEntry);
   const[image,setImage]=useState<File|null>(null);
   const[imagePreview,setImagePreview]=useState("");
+  const[existingImageUrl,setExistingImageUrl]=useState("");
   const[crop,setCrop]=useState<CropSettings>({zoom:1,x:0,y:0});
   const[editing,setEditing]=useState<Entry|null>(null);
   const[saving,setSaving]=useState(false);
@@ -30,7 +31,7 @@ export function Admin(){
     return()=>listener?.data.subscription.unsubscribe();
   },[]);
   useEffect(()=>{if(user){loadEntries();loadInquiries();getSettings().then(setSettings)}},[user]);
-  useEffect(()=>{if(!image){setImagePreview("");return}const url=URL.createObjectURL(image);setImagePreview(url);return()=>URL.revokeObjectURL(url)},[image]);
+  useEffect(()=>{if(!image){setImagePreview(existingImageUrl);return}const url=URL.createObjectURL(image);setImagePreview(url);return()=>URL.revokeObjectURL(url)},[image,existingImageUrl]);
 
   function acceptUser(email:string|null){
     if(email&&email.toLowerCase()!==OWNER_EMAIL){supabase?.auth.signOut();setNote("This account is not authorized as the website owner.");setUser(null);return}
@@ -88,9 +89,27 @@ export function Admin(){
   }
   function startEdit(item:Entry){
     setEditing(item);setEntry({section:item.section,title:item.title,excerpt:item.excerpt,body:item.body,sort_order:item.sort_order,published:item.published});setCrop({zoom:1,x:0,y:0});setCropDirty(false);setNote(`Editing “${item.title}”`);window.scrollTo({top:0,behavior:"smooth"});
-    if(item.image_url){try{const response=await fetch(item.image_url);const blob=await response.blob();setImage(new File([blob],"existing-article-image.webp",{type:blob.type||"image/webp"}));}catch{setImage(null);setNote("Image loaded for display, but browser could not prepare it for cropping. Use Replace article image to upload an editable copy.");}}else setImage(null);
+    setExistingImageUrl(item.image_url||"");
+    setImage(null);
+    if(item.image_url){
+      try{
+        let blob:Blob|null=null;
+        if(item.image_path&&supabase){
+          const downloaded=await supabase.storage.from("article-images").download(item.image_path);
+          if(!downloaded.error)blob=downloaded.data;
+        }
+        if(!blob){
+          const response=await fetch(item.image_url,{mode:"cors",cache:"no-store"});
+          if(response.ok)blob=await response.blob();
+        }
+        if(blob) setImage(new File([blob],"existing-article-image.webp",{type:blob.type||"image/webp"}));
+        else setNote("Existing image is displayed. Reframe it with the sliders, then save; if your browser blocks editing, use Replace article image.");
+      }catch{
+        setNote("Existing image is displayed, but could not be prepared for pixel editing. Try Replace article image if the crop preview does not activate.");
+      }
+    }
   }
-  function resetEditor(){setEditing(null);setEntry(emptyEntry);setImage(null);setCrop({zoom:1,x:0,y:0});setCropDirty(false)}
+  function resetEditor(){setEditing(null);setEntry(emptyEntry);setImage(null);setExistingImageUrl("");setCrop({zoom:1,x:0,y:0});setCropDirty(false)}
   async function updateStatus(item:Inquiry,status:Inquiry["status"]){
     if(!supabase)return;
     const{error}=await supabase.from("inquiries").update({status}).eq("id",item.id);
