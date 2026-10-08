@@ -19,7 +19,9 @@ export function Admin(){
   const[imagePreview,setImagePreview]=useState("");
   const[crop,setCrop]=useState<CropSettings>({zoom:1,x:0,y:0});
   const[editing,setEditing]=useState<Entry|null>(null);
-  const[saving,setSaving]=useState(false);\n  const[dragging,setDragging]=useState(false);\n  const dragStart=React.useRef({x:0,y:0,cropX:0,cropY:0});
+  const[saving,setSaving]=useState(false);
+  const[dragging,setDragging]=useState(false);
+  const dragStart=React.useRef({x:0,y:0,cropX:0,cropY:0});
 
   useEffect(()=>{
     supabase?.auth.getUser().then(({data})=>acceptUser(data.user?.email||null));
