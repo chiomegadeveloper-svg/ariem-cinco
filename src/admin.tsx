@@ -87,7 +87,7 @@ export function Admin(){
     if(!error&&item.image_path)await supabase.storage.from("article-images").remove([item.image_path]);
     setNote(error?error.message:"Entry deleted.");await loadEntries();
   }
-  function startEdit(item:Entry){
+  async function startEdit(item:Entry){
     setEditing(item);setEntry({section:item.section,title:item.title,excerpt:item.excerpt,body:item.body,sort_order:item.sort_order,published:item.published});setCrop({zoom:1,x:0,y:0});setCropDirty(false);setNote(`Editing “${item.title}”`);window.scrollTo({top:0,behavior:"smooth"});
     setExistingImageUrl(item.image_url||"");
     setImage(null);
